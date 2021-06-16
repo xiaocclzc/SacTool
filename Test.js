@@ -3,8 +3,8 @@ function genData(){
     return [1,2,3];
 }
 function addData(){
-    if(!this.datas){
-        this.datas = [];
+    if(!this.datas1){
+        this.datas1 = [];
     }
     this.datas.push(Math.random());
 }
