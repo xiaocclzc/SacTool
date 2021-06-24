@@ -192,6 +192,8 @@ ClientBin/
 *.pfx
 *.publishsettings
 node_modules/
+dist/
+package-lock.json
 orleans.codegen.cs
 
 # Since there are multiple workflows, uncomment next line to ignore bower_components
