@@ -8,3 +8,6 @@ function addData(){
     }
     this.datas.push(Math.random());
 }
+function test(){
+    console.log(1)
+}
