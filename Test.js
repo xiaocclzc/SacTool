@@ -9,7 +9,7 @@ function addData(){
     this.datas.push(Math.random());
 }
 function test(){
-    console.log(1)
+    console.log(1);
 }
 function test2(){
     console.log(1)
