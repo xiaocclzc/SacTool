@@ -1,16 +1,14 @@
-//this is test file
-function genData(){
-    return [1,2,3];
-}
-function addData(){
-    if(!this.datas1){
-        this.datas1 = [];
-    }
-    this.datas.push(Math.random());
-}
-function test(){
-    console.log(1);
-}
-function test2(){
-    console.log(1)
+const commandUtils = require("./Utils/commandUtils")
+const npmUtils = require("./Utils/npmUtils");
+const decompUtils = require("./Utils/decompUtils");
+const reqUtils = require("./Utils/reqUtils");
+const streamUtils = require("./Utils/streamUtils");
+const templateUtils = require("./Utils/templateUtils");
+module.exports = {
+    commandUtils,
+    npmUtils,
+    decompUtils,
+    reqUtils,
+    streamUtils,
+    templateUtils
 }

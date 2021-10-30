@@ -1,6 +1,7 @@
 {
   "name": "sac-react-template",
-  "version": "1.0.0",
+  "alias": "${_ProjectName}",
+  "version": "1.0.1",
   "description": "react模版（sac）",
   "main": "index.js",
   "scripts": {

@@ -7,6 +7,7 @@ const fs = require('fs');
 // const url = 'https://registry.npmjs.org/sac-react-template/-/sac-react-template-1.0.0.tgz';
 // const filename = "sac-react-template-1.0.0.tgz";
 const destDir = path.resolve('./');
+const streamUtils = require("./streamUtils");
 //已创建过的路径
 let dirCache = {};
 /**
@@ -24,7 +25,7 @@ function mkdir(filepath) {
         dir = dir + '/' + arr[i];
     }
 }
-function onEntry(header, stream, next, handle) {
+function onEntry(header, stream, next, pathHandle, jsonHandle) {
     stream.on('end', next);
     // header.type => file | directory
     // header.name => path name
@@ -37,20 +38,27 @@ function onEntry(header, stream, next, handle) {
         fileName = fileName.substring(8);
     }
     if (header.type === 'file') {
-        const fPath = path.join(destDir, fileName);
-        if (typeof (handle) == "function") {//用户自定义文件路径
-            fPath = handle(fPath);
+        let fPath = path.join(destDir, fileName);
+        if (typeof (pathHandle) == "function") {//用户自定义文件路径
+            fPath = pathHandle(fPath);
         }
         if (!fPath) {
             stream.resume();
             return;
         }
-        const index = fPath.lastIndexOf("/");
+        const index = fPath.replace(/\\/g,"/").lastIndexOf("/");
         if (index != -1) {
-            const tmpDir = fileName.substring(0, index);
+            const tmpDir = fPath.substring(0, index);
             mkdir(tmpDir);
         }
-        stream.pipe(fs.createWriteStream(path.join(destDir, fileName)));
+        let writerStream = fs.createWriteStream(fPath);
+        if(fPath.endsWith(".json") && typeof(jsonHandle) == "function"){
+            //handleData
+            streamUtils.transform(stream,writerStream,jsonHandle)
+            // stream.pipe(writerStream);
+        }else{
+            stream.pipe(writerStream);
+        }
     } else { // directory
         mkdir(path.join(destDir, fileName));
         stream.resume();
@@ -59,15 +67,20 @@ function onEntry(header, stream, next, handle) {
 /**
  * 
  * @param {String} tgzFilePath 压缩包的绝对路径
- * @param {Function} handle 解压每个文件前的处理函数，支持调整解压目录
+ * @param {Object} params   其他参数
+ * {
+ *  pathHandle {Function}  文件路径处理
+ *  jsonHandle {Function}  json文件处理
+ * }
  * @returns {Promise}
  */
-function untgz(tgzFilePath, handle) {
+function untgz(tgzFilePath, params) {
+    const {pathHandle,jsonHandle} = (params ? params : {});
     const promise = new Promise((resolve, reject) => {
-        const handler = typeof (handle) != "function" ? onEntry : (header, stream, next) => {
-            const args = [header, stream, next, handle];
-            return onEntry.apply(this, args);
-        }
+        const handler = (...args) => {
+            let tmpArgs = [...args, pathHandle, jsonHandle];
+            return onEntry.apply(this, tmpArgs);
+        };
         new tgz.UncompressStream({ source: tgzFilePath }).on('error', (error) => {
             reject(error);
         }).on('finish', () => {
