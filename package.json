@@ -1,0 +1,23 @@
+{
+  "name": "sactool",
+  "version": "1.0.0",
+  "description": "各种插件以及单项功能验证的项目",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaocclzc/SacTool.git"
+  },
+  "author": "liangzc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xiaocclzc/SacTool/issues"
+  },
+  "homepage": "https://github.com/xiaocclzc/SacTool#readme",
+  "dependencies": {
+    "compressing": "^1.5.1",
+    "request": "^2.88.2"
+  }
+}

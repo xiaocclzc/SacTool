@@ -1,0 +1,11 @@
+{
+  "name": "sac-react-template",
+  "version": "1.0.0",
+  "description": "react模版（sac）",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "liangzc",
+  "license": "ISC"
+}
